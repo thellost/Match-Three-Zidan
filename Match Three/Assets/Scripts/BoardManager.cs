@@ -57,6 +57,8 @@ public class BoardManager : MonoBehaviour
 
     private TileController[,] tiles;
 
+    private int combo;
+
 
 
     private void Start()
@@ -144,9 +146,12 @@ public class BoardManager : MonoBehaviour
     {
         IsProcessing = true;
         ProcessMatches();
+        combo = 0;
+
+
     }
 
-   
+
 
     public bool IsAllTrue(List<bool> list)
     {
@@ -222,7 +227,9 @@ public class BoardManager : MonoBehaviour
             return;
         }
 
+        combo++;
 
+        ScoreManager.Instance.IncrementCurrentScore(matchingTiles.Count, combo);
         StartCoroutine(ClearMatches(matchingTiles, ProcessDrop));
     }
 

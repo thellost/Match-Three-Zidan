@@ -26,6 +26,7 @@ public class TileController : MonoBehaviour
     private bool isSelected = false;
     private bool IsProcessing = false;
     private bool IsSwapping = false;
+    private GameFlowManager game;
     private void Start()
     {
         IsProcessing = false;
@@ -38,6 +39,7 @@ public class TileController : MonoBehaviour
     private void Awake()
     {
         board = BoardManager.Instance;
+        game = GameFlowManager.Instance;
         render = GetComponent<SpriteRenderer>();
     }
     public IEnumerator SetDestroyed(System.Action onCompleted)
@@ -202,13 +204,17 @@ public class TileController : MonoBehaviour
         ChangeId(Random.Range(0, board.tileTypes.Count), x, y);
     }
 
+
+
     private void OnMouseDown()
     {
         // Non Selectable conditions
-        if (render.sprite == null || board.IsAnimating)
+        if (render.sprite == null || board.IsAnimating || game.IsGameOver)
         {
             return;
         }
+
+        SoundManager.Instance.PlayTap();
 
         // Already selected this tile?
         if (isSelected)
@@ -225,7 +231,7 @@ public class TileController : MonoBehaviour
 
             else
             {
-                // is this an adjacent tile?
+                // is this an adjacent tiles?
                 if (GetAllAdjacentTiles().Contains(previousSelected))
                 {
                     TileController otherTile = previousSelected;
@@ -239,6 +245,7 @@ public class TileController : MonoBehaviour
                         }
                         else
                         {
+                            SoundManager.Instance.PlayWrong();
                             SwapTile(otherTile);
                         }
                     });
