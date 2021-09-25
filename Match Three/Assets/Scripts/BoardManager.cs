@@ -7,7 +7,7 @@ public class BoardManager : MonoBehaviour
 
 
     //regionSingleton
-
+    #region Singleton
     private static BoardManager _instance = null;
 
     public static BoardManager Instance
@@ -28,6 +28,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    #endregion
 
     [Header("Board")]
     public Vector2Int size;
